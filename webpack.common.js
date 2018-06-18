@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './src/App.tsx',
@@ -8,6 +7,19 @@ module.exports = {
     filename: '[name].bundle.js',
     chunkFilename: "[name].js",
     path: path.resolve(__dirname, 'dist')
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          name: 'vendor',
+          test: 'vendor',
+          enforce: true
+        },
+      }
+    },
+    runtimeChunk: true
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
@@ -21,9 +33,8 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'public', 'index.html')
+      template: path.resolve(__dirname, 'public', 'index.html')
     }),
   ]
 }
